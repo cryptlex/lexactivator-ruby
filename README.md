@@ -1,5 +1,5 @@
 # lexactivator-ruby
- LexActivator API wrapper for Python (licensing library)
+ LexActivator API wrapper for Ruby (licensing library)
  
 Refer to following for documentation:
 

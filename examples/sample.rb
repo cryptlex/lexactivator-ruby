@@ -82,9 +82,7 @@ if LexStatusCodes::LA_OK == status
   # email = String.new(256)  # ruby >= 2.4
   email = " " * 256
   LexActivator.GetLicenseUserEmail(email, 256)
-  #   puts "License user email: #{email.read_string}"
   puts "License user email: #{email.rstrip}"
-
   puts "License is genuinely activated!"
 elsif LexStatusCodes::LA_EXPIRED == status
   puts "License is genuinely activated but has expired!"
@@ -95,10 +93,11 @@ elsif LexStatusCodes::LA_GRACE_PERIOD_OVER == status
 else
   trialStatus = LexActivator.IsTrialGenuine()
   if LexStatusCodes::LA_OK == trialStatus
-    # const trialExpiryDate = ref.alloc(ref.types.uint32)
-    # LexActivator.GetTrialExpiryDate(trialExpiryDate)
-    # const daysLeft = (trialExpiryDate.deref() - (new Date().getTime() / 1000)) / 86500
-    # puts "Trial days left:", daysLeft)
+    # get days left for expiry
+    trialExpiryDate = FFI::MemoryPointer.new(:uint)
+    LexActivator.GetTrialExpiryDate(trialExpiryDate)
+    daysLeft = (trialExpiryDate.read_int - Time.now.to_i) / 86500
+    puts "Trial days left: #{daysLeft}"
   elsif LexStatusCodes::LA_TRIAL_EXPIRED == trialStatus
     puts "Trial has expired!"
     # Time to buy the license and activate the app

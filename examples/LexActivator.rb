@@ -2,7 +2,7 @@ require "ffi"
 
 module LexActivator
   extend FFI::Library
-  ffi_lib "LexActivator"
+  ffi_lib ["LexActivator", "./libLexActivator.so"]
   callback :license_callback, [:uint], :void
 
   def self.attach_function(name, *_)

@@ -79,7 +79,6 @@ if LexStatusCodes::LA_OK == status
   puts "Days left: #{daysLeft}"
 
   # get license user email
-  # email = String.new("", capacity: 256)  # ruby >= 2.4
   email = " " * 256
   LexActivator.GetLicenseUserEmail(email, 256)
   puts "License user email: #{email.rstrip}"

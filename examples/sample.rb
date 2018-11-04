@@ -63,16 +63,27 @@ def activate_trial()
   end
 end
 
+LicenseCallback = FFI::Function.new(:void, [:uint]) do |status|
+  puts "License status: #{status}"
+end
+
 init()
-# LexActivator.SetLicenseCallback(LicenseCallback(function(status){
-#     puts "License status #{status}"
-# end))
+# activate()
+LexActivator.SetLicenseCallback(LicenseCallback)
 status = LexActivator.IsLicenseGenuine()
 if LexStatusCodes::LA_OK == status
-  # const expiryDate = ref.alloc(ref.types.uint32)
-  # LexActivator.GetLicenseExpiryDate(expiryDate)
-  # const daysLeft = (expiryDate.deref() - (new Date().getTime() / 1000)) / 86500
-  # puts "Days left: #{daysLeft}"
+  # get days left for expiry
+  expiryDate = FFI::MemoryPointer.new(:uint)
+  LexActivator.GetLicenseExpiryDate(expiryDate)
+  daysLeft = (expiryDate.read_int - Time.now.to_i) / 86500
+  puts "Days left: #{daysLeft}"
+
+  # get license user email
+  # email = String.new(256)  # ruby >= 2.4
+  email = " " * 256
+  LexActivator.GetLicenseUserEmail(email, 256)
+  #   puts "License user email: #{email.read_string}"
+  puts "License user email: #{email.rstrip}"
 
   puts "License is genuinely activated!"
 elsif LexStatusCodes::LA_EXPIRED == status

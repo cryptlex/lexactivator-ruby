@@ -3,6 +3,7 @@ require "ffi"
 module LexActivator
   extend FFI::Library
   ffi_lib "LexActivator"
+  callback :license_callback, [:uint], :void
 
   def self.attach_function(name, *_)
     begin; super;     rescue FFI::NotFoundError => e
@@ -44,7 +45,7 @@ module LexActivator
   # @param [FFI::Pointer(CallbackType)] callback
   # @return [Integer]
   # @scope class
-  attach_function :SetLicenseCallback, :SetLicenseCallback, [:pointer], :int
+  attach_function :SetLicenseCallback, :SetLicenseCallback, [:license_callback], :int
 
   # @method SetActivationMetadata(key, value)
   # @param [String] key

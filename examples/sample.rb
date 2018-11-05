@@ -6,19 +6,19 @@ require "./LexStatusCodes"
 
 def init()
   # status = LexActivator.SetProductFile("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE")
-  status = LexActivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE")
+  status = LexActivator.SetProductData(LexActivator::encode_utf16("PASTE_CONTENT_OF_PRODUCT.DAT_FILE"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
   end
 
-  status = LexActivator.SetProductId("PASTE_PRODUCT_ID", LexActivator::PermissionFlags::LA_USER)
+  status = LexActivator.SetProductId(LexActivator::encode_utf16("PASTE_PRODUCT_ID"), LexActivator::PermissionFlags::LA_USER)
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
   end
 
-  status = LexActivator.SetAppVersion("PASTE_YOUR_APP_VERION")
+  status = LexActivator.SetAppVersion(LexActivator::encode_utf16("PASTE_YOUR_APP_VERION"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
@@ -26,13 +26,13 @@ def init()
 end
 
 def activate()
-  status = LexActivator.SetLicenseKey("PASTE_LICENCE_KEY")
+  status = LexActivator.SetLicenseKey(LexActivator::encode_utf16("PASTE_LICENSE_KEY"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
   end
 
-  status = LexActivator.SetActivationMetadata("key1", "value1")
+  status = LexActivator.SetActivationMetadata(LexActivator::encode_utf16("key1"), LexActivator::encode_utf16("value1"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
@@ -47,7 +47,7 @@ def activate()
 end
 
 def activate_trial()
-  status = LexActivator.SetTrialActivationMetadata("key1", "value1")
+  status = LexActivator.SetTrialActivationMetadata(LexActivator::encode_utf16("key1"), LexActivator::encode_utf16("value1"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
@@ -79,9 +79,10 @@ if LexStatusCodes::LA_OK == status
   puts "Days left: #{daysLeft}"
 
   # get license user email
-  email = " " * 256
-  LexActivator.GetLicenseUserEmail(email, 256)
-  puts "License user email: #{email.rstrip}"
+  buffer = FFI::MemoryPointer.new(:char, 256)
+  LexActivator.GetLicenseUserEmail(buffer, buffer.size)
+  email = LexActivator::decode_utf16(buffer.read_string(buffer.size).rstrip)
+  puts "License user email: #{email}"
   puts "License is genuinely activated!"
 elsif LexStatusCodes::LA_EXPIRED == status
   puts "License is genuinely activated but has expired!"

@@ -11,6 +11,22 @@ module LexActivator
     end
   end
 
+  def self.encode_utf16(input)
+    if FFI::Platform::IS_WINDOWS
+      input.encode("UTF-16LE")
+    else
+      input
+    end
+  end
+  
+  def self.decode_utf16(input)
+    if FFI::Platform::IS_WINDOWS
+      "#{input}\0".force_encoding("UTF-16LE").encode("UTF-8",:invalid => :replace, :undef => :replace)
+    else
+      input
+    end
+  end
+
   module PermissionFlags
     LA_USER = 1
     LA_SYSTEM = 2
@@ -79,7 +95,7 @@ module LexActivator
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetProductMetadata, :GetProductMetadata, [:string, :string, :uint], :int
+  attach_function :GetProductMetadata, :GetProductMetadata, [:string, :pointer, :uint], :int
 
   # @method GetLicenseMetadata(key, value, length)
   # @param [String] key
@@ -87,14 +103,14 @@ module LexActivator
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseMetadata, :GetLicenseMetadata, [:string, :string, :uint], :int
+  attach_function :GetLicenseMetadata, :GetLicenseMetadata, [:string, :pointer, :uint], :int
 
   # @method GetLicenseKey(license_key, length)
   # @param [String] license_key
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseKey, :GetLicenseKey, [:string, :uint], :int
+  attach_function :GetLicenseKey, :GetLicenseKey, [:pointer, :uint], :int
 
   # @method GetLicenseExpiryDate(expiry_date)
   # @param [FFI::Pointer(*Uint32T)] expiry_date
@@ -107,21 +123,21 @@ module LexActivator
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseUserEmail, :GetLicenseUserEmail, [:string, :uint], :int
+  attach_function :GetLicenseUserEmail, :GetLicenseUserEmail, [:pointer, :uint], :int
 
   # @method GetLicenseUserName(name, length)
   # @param [String] name
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseUserName, :GetLicenseUserName, [:string, :uint], :int
+  attach_function :GetLicenseUserName, :GetLicenseUserName, [:pointer, :uint], :int
 
   # @method GetLicenseType(license_type, length)
   # @param [String] license_type
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseType, :GetLicenseType, [:string, :uint], :int
+  attach_function :GetLicenseType, :GetLicenseType, [:pointer, :uint], :int
 
   # @method GetActivationMetadata(key, value, length)
   # @param [String] key
@@ -129,7 +145,7 @@ module LexActivator
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetActivationMetadata, :GetActivationMetadata, [:string, :string, :uint], :int
+  attach_function :GetActivationMetadata, :GetActivationMetadata, [:string, :pointer, :uint], :int
 
   # @method GetTrialActivationMetadata(key, value, length)
   # @param [String] key
@@ -137,7 +153,7 @@ module LexActivator
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetTrialActivationMetadata, :GetTrialActivationMetadata, [:string, :string, :uint], :int
+  attach_function :GetTrialActivationMetadata, :GetTrialActivationMetadata, [:string, :pointer, :uint], :int
 
   # @method GetTrialExpiryDate(trial_expiry_date)
   # @param [FFI::Pointer(*Uint32T)] trial_expiry_date
@@ -150,7 +166,7 @@ module LexActivator
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetTrialId, :GetTrialId, [:string, :uint], :int
+  attach_function :GetTrialId, :GetTrialId, [:pointer, :uint], :int
 
   # @method GetLocalTrialExpiryDate(trial_expiry_date)
   # @param [FFI::Pointer(*Uint32T)] trial_expiry_date

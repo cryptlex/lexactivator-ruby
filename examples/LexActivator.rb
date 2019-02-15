@@ -89,6 +89,12 @@ module LexActivator
   # @scope class
   attach_function :SetNetworkProxy, :SetNetworkProxy, [:string], :int
 
+  # @method SetCryptlexHost(host)
+  # @param [String] host
+  # @return [Integer]
+  # @scope class
+  attach_function :SetCryptlexHost, :SetCryptlexHost, [:string], :int
+
   # @method GetProductMetadata(key, value, length)
   # @param [String] key
   # @param [String] value

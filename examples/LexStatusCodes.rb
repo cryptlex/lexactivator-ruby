@@ -31,6 +31,17 @@ module LexStatusCodes
   # with. Ensure your date and time settings are correct.
   LA_LOCAL_TRIAL_EXPIRED = 26
 
+  # CODE: LA_RELEASE_UPDATE_AVAILABLE
+  # MESSAGE: A new update is available for the product. This means a new release has
+  # been published for the product.
+
+  LA_RELEASE_UPDATE_AVAILABLE = 30
+
+  # CODE: LA_RELEASE_NO_UPDATE_AVAILABLE
+  # MESSAGE: No new update is available for the product. The current version is latest.
+
+  LA_RELEASE_NO_UPDATE_AVAILABLE = 31
+
   # CODE: LA_E_FILE_PATH
   # MESSAGE: Invalid file path.
   LA_E_FILE_PATH = 40
@@ -155,6 +166,10 @@ module LexStatusCodes
   # CODE: LA_E_TIME_MODIFIED
   # MESSAGE: The system time has been tampered (backdated).
   LA_E_TIME_MODIFIED = 69
+
+  # CODE: LA_E_RELEASE_VERSION_FORMAT
+  # MESSAGE: Invalid version format.
+  LA_E_RELEASE_VERSION_FORMAT = 70
 
   # CODE: LA_E_VM
   # MESSAGE: Application is being run inside a virtual machine / hypervisor,

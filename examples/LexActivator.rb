@@ -4,6 +4,7 @@ module LexActivator
   extend FFI::Library
   ffi_lib ["LexActivator", "./libLexActivator.so", "#{File.dirname(__FILE__)}/LexActivator.dll"]
   callback :license_callback, [:uint], :void
+  callback :release_update_callback, [:uint], :void
 
   def self.attach_function(name, *_)
     begin; super;     rescue FFI::NotFoundError => e
@@ -18,10 +19,10 @@ module LexActivator
       input
     end
   end
-  
+
   def self.decode_utf16(input)
     if FFI::Platform::IS_WINDOWS
-      "#{input}\0".force_encoding("UTF-16LE").encode("UTF-8",:invalid => :replace, :undef => :replace)
+      "#{input}\0".force_encoding("UTF-16LE").encode("UTF-8", :invalid => :replace, :undef => :replace)
     else
       input
     end
@@ -139,6 +140,21 @@ module LexActivator
   # @scope class
   attach_function :GetLicenseUserName, :GetLicenseUserName, [:pointer, :uint], :int
 
+  # @method GetLicenseUserCompany(name, length)
+  # @param [String] name
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseUserCompany, :GetLicenseUserCompany, [:pointer, :uint], :int
+
+  # @method GetLicenseUserMetadata(key, value, length)
+  # @param [String] key
+  # @param [String] value
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseUserMetadata, :GetLicenseUserMetadata, [:string, :pointer, :uint], :int
+
   # @method GetLicenseType(license_type, length)
   # @param [String] license_type
   # @param [Integer] length
@@ -153,6 +169,12 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :GetActivationMetadata, :GetActivationMetadata, [:string, :pointer, :uint], :int
+
+  # @method GetServerSyncGracePeriodExpiryDate(expiry_date)
+  # @param [FFI::Pointer(*Uint32T)] expiry_date
+  # @return [Integer]
+  # @scope class
+  attach_function :GetServerSyncGracePeriodExpiryDate, :GetServerSyncGracePeriodExpiryDate, [:pointer], :int
 
   # @method GetTrialActivationMetadata(key, value, length)
   # @param [String] key
@@ -180,6 +202,15 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :GetLocalTrialExpiryDate, :GetLocalTrialExpiryDate, [:pointer], :int
+
+  # @method CheckForReleaseUpdate(platform, version, channel, callback)
+  # @param [String] platform
+  # @param [String] version
+  # @param [String] channel
+  # @param [FFI::Pointer(CallbackType)] callback
+  # @return [Integer]
+  # @scope class
+  attach_function :CheckForReleaseUpdate, :CheckForReleaseUpdate, [:string, :string, :string, :release_update_callback], :int
 
   # @method ActivateLicense()
   # @return [Integer]

@@ -67,6 +67,10 @@ LicenseCallback = FFI::Function.new(:void, [:uint]) do |status|
   puts "License status: #{status}"
 end
 
+SoftwareReleaseUpdateCallback = FFI::Function.new(:void, [:uint]) do |status|
+  puts "Release status: #{status}"
+end
+
 init()
 # activate()
 LexActivator.SetLicenseCallback(LicenseCallback)
@@ -84,6 +88,12 @@ if LexStatusCodes::LA_OK == status
   email = LexActivator::decode_utf16(buffer.read_string(buffer.size).rstrip)
   puts "License user email: #{email}"
   puts "License is genuinely activated!"
+
+  # puts "Checking for software release update..."
+  # status = LexActivator.CheckForReleaseUpdate("windows", "1.0.0", "stable", SoftwareReleaseUpdateCallback)
+  # if LexStatusCodes::LA_OK != status
+  #   puts "Error checking for software release update: #{status}"
+  # end
 elsif LexStatusCodes::LA_EXPIRED == status
   puts "License is genuinely activated but has expired!"
 elsif LexStatusCodes::LA_SUSPENDED == status

@@ -59,6 +59,13 @@ module LexActivator
   # @scope class
   attach_function :SetLicenseKey, :SetLicenseKey, [:string], :int
 
+  # @method SetLicenseUserCredential(email, password)
+  # @param [String] email
+  # @param [String] password
+  # @return [Integer]
+  # @scope class
+  attach_function :SetLicenseUserCredential, :SetLicenseUserCredential, [:string, :string], :int
+
   # @method SetLicenseCallback(callback)
   # @param [FFI::Pointer(CallbackType)] callback
   # @return [Integer]

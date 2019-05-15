@@ -120,6 +120,14 @@ module LexActivator
   # @scope class
   attach_function :GetLicenseMetadata, :GetLicenseMetadata, [:string, :pointer, :uint], :int
 
+  # @method GetLicenseMeterAttribute(name, allowed_uses, total_uses)
+  # @param [String] name
+  # @param [FFI::Pointer(*Uint32T)] allowed_uses
+  # @param [FFI::Pointer(*Uint32T)] total_uses
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseMeterAttribute, :GetLicenseMeterAttribute, [:string, :pointer, :pointer], :int
+
   # @method GetLicenseKey(license_key, length)
   # @param [String] license_key
   # @param [Integer] length
@@ -176,6 +184,13 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :GetActivationMetadata, :GetActivationMetadata, [:string, :pointer, :uint], :int
+
+  # @method GetActivationMeterAttributeUses(name, uses)
+  # @param [String] name
+  # @param [FFI::Pointer(*Uint32T)] uses
+  # @return [Integer]
+  # @scope class
+  attach_function :GetActivationMeterAttributeUses, :GetActivationMeterAttributeUses, [:string, :pointer], :int
 
   # @method GetServerSyncGracePeriodExpiryDate(expiry_date)
   # @param [FFI::Pointer(*Uint32T)] expiry_date
@@ -295,6 +310,26 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :ExtendLocalTrial, :ExtendLocalTrial, [:uint], :int
+
+  # @method IncrementActivationMeterAttributeUses(name, increment)
+  # @param [String] name
+  # @param [Integer] increment
+  # @return [Integer]
+  # @scope class
+  attach_function :IncrementActivationMeterAttributeUses, :IncrementActivationMeterAttributeUses, [:string, :uint], :int
+
+  # @method DecrementActivationMeterAttributeUses(name, decrement)
+  # @param [String] name
+  # @param [Integer] decrement
+  # @return [Integer]
+  # @scope class
+  attach_function :DecrementActivationMeterAttributeUses, :DecrementActivationMeterAttributeUses, [:string, :uint], :int
+
+  # @method ResetActivationMeterAttributeUses(name)
+  # @param [String] name
+  # @return [Integer]
+  # @scope class
+  attach_function :ResetActivationMeterAttributeUses, :ResetActivationMeterAttributeUses, [:string], :int
 
   # @method Reset()
   # @return [Integer]

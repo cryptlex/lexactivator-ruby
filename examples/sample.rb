@@ -79,7 +79,7 @@ if LexStatusCodes::LA_OK == status
   # get days left for expiry
   expiryDate = FFI::MemoryPointer.new(:uint)
   LexActivator.GetLicenseExpiryDate(expiryDate)
-  daysLeft = (expiryDate.read_int - Time.now.to_i) / 86500
+  daysLeft = (expiryDate.read_int - Time.now.to_i) / 86400
   puts "Days left: #{daysLeft}"
 
   # get license user email

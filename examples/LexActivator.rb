@@ -112,6 +112,15 @@ module LexActivator
   # @scope class
   attach_function :GetProductMetadata, :GetProductMetadata, [:string, :pointer, :uint], :int
 
+  # @method GetProductVersionFeatureFlag(name, enabled, data, length)
+  # @param [String] name
+  # @param [String] enabled
+  # @param [String] data
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetProductVersionFeatureFlag, :GetProductVersionFeatureFlag, [:string, :pointer, :pointer, :uint], :int
+
   # @method GetLicenseMetadata(key, value, length)
   # @param [String] key
   # @param [String] value

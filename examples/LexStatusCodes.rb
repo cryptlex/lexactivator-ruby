@@ -181,7 +181,15 @@ module LexStatusCodes
 
   # CODE: LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED
   # MESSAGE: The meter attribute has reached it's usage limit.
-  LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED = 73
+  LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED = 73    
+  
+  # CODE: LA_E_PRODUCT_VERSION_NOT_LINKED
+  # MESSAGE: No product version is linked with the license.
+  LA_E_PRODUCT_VERSION_NOT_LINKED = 75,
+  
+  #  CODE: LA_E_FEATURE_FLAG_NOT_FOUND
+  # MESSAGE: The product version feature flag does not exist.
+  LA_E_FEATURE_FLAG_NOT_FOUND = 76,
 
   # CODE: LA_E_VM
   # MESSAGE: Application is being run inside a virtual machine / hypervisor,

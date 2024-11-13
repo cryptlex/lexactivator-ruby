@@ -31,7 +31,57 @@ module LexActivator
   module PermissionFlags
     LA_USER = 1
     LA_SYSTEM = 2
+    LA_ALL_USERS = 3
     LA_IN_MEMORY = 4
+  end
+
+  BUFFER_SIZE_256 = 256
+  MAX_METADATA_SIZE = 100 
+
+  class OrganizationAddress < FFI::Struct
+    layout :addressLine1, [:char, BUFFER_SIZE_256],
+           :addressLine2, [:char, BUFFER_SIZE_256],
+           :city, [:char, BUFFER_SIZE_256],
+           :state, [:char, BUFFER_SIZE_256],
+           :country, [:char, BUFFER_SIZE_256],
+           :postalCode, [:char, BUFFER_SIZE_256]
+
+    def to_string
+      {
+        addressLine1: self[:addressLine1].to_s,
+        addressLine2: self[:addressLine2].to_s,
+        city: self[:city].to_s,
+        state: self[:state].to_s,
+        country: self[:country].to_s,
+        postalCode: self[:postalCode].to_s
+      }
+    end
+  end
+
+  class Metadata < FFI::Struct
+    layout :key, [:char, BUFFER_SIZE_256],
+           :value, [:char, BUFFER_SIZE_256]
+  end
+
+  class UserLicense < FFI::Struct
+    layout :allowedActivations, :int64,
+           :allowedDeactivations, :int64,
+           :key, [:char, BUFFER_SIZE_256],
+           :type, [:char, BUFFER_SIZE_256],
+           :metadata, [Metadata, MAX_METADATA_SIZE] 
+
+    
+    def to_string
+      {
+        allowedActivations: self[:allowedActivations],
+        allowedDeactivations: self[:allowedDeactivations],
+        key: self[:key].to_s.strip,
+        type: self[:type].to_s.strip,
+        metadata: self[:metadata].take_while { |m| !m[:key].to_s.strip.empty? }.map do |m|
+          { key: m[:key].to_s.strip, value: m[:value].to_s.strip }
+        end
+      }
+    end
   end
 
   # @method SetProductFile(file_path)
@@ -53,6 +103,18 @@ module LexActivator
   # @scope class
   attach_function :SetProductId, :SetProductId, [:string, :uint], :int
 
+  # @method SetDebugMode(enable)
+  # @param [Integer] enable - 0 or 1 to disable or enable logging.
+  # @return [Integer]
+  # @scope class
+  attach_function :SetDebugMode, :SetDebugMode, [:uint], :int
+
+  # @method SetCustomDeviceFingerprint(fingerprint)
+  # @param [String] fingerprint
+  # @return [Integer]
+  # @scope class
+  attach_function :SetCustomDeviceFingerprint, :SetCustomDeviceFingerprint, [:string], :int
+
   # @method SetLicenseKey(license_key)
   # @param [String] license_key
   # @return [Integer]
@@ -71,6 +133,12 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :SetLicenseCallback, :SetLicenseCallback, [:license_callback], :int
+  
+  # @method SetActivationLeaseDuration(leaseDuration)
+  # @param [Integer] leaseDuration - value of the lease duration. A value of -1 indicates unlimited lease duration.
+  # @return [Integer]
+  # @scope class
+  attach_function :SetActivationLeaseDuration, [:int64], :int
 
   # @method SetActivationMetadata(key, value)
   # @param [String] key
@@ -92,6 +160,37 @@ module LexActivator
   # @scope class
   attach_function :SetAppVersion, :SetAppVersion, [:string], :int
 
+  # @method SetReleaseVersion(releaseVersion)
+  # @param [String] releaseVersion - string in following allowed formats: x.x, x.x.x, x.x.x.x
+  # @return [Integer]
+  # @scope class
+  attach_function :SetReleaseVersion, :SetReleaseVersion, [:string], :int
+  
+  # @method SetReleasePublishedDate(releasePublishedDate)
+  # @param [Integer] releasePublishedDate - unix timestamp of release published date.
+  # @return [Integer]
+  # @scope class
+  attach_function :SetReleasePublishedDate, :SetReleasePublishedDate, [:uint], :int
+
+  # @method SetReleasePlatform(releasePlatform)
+  # @param [String] releasePlatform - release platform e.g. windows, macos, linux 
+  # @return [Integer]
+  # @scope class
+  attach_function :SetReleasePlatform, :SetReleasePlatform, [:string], :int
+
+  # @method SetReleaseChannel(releaseChannel)
+  # @param [String] releaseChannel - release channel e.g. stable
+  # @return [Integer]
+  # @scope class
+  attach_function :SetReleaseChannel, :SetReleaseChannel, [:string], :int
+
+  # @method SetOfflineActivationRequestMeterAttributeUses(name, uses)
+  # @param [String] name - name of the meter attribute
+  # @param [Integer] uses - the uses value
+  # @return [Integer]
+  # @scope class
+  attach_function :SetOfflineActivationRequestMeterAttributeUses, :SetOfflineActivationRequestMeterAttributeUses, [:string, :uint], :int
+
   # @method SetNetworkProxy(proxy)
   # @param [String] proxy
   # @return [Integer]
@@ -101,8 +200,20 @@ module LexActivator
   # @method SetCryptlexHost(host)
   # @param [String] host
   # @return [Integer]
-  # @scope class
+  # @scope class  
   attach_function :SetCryptlexHost, :SetCryptlexHost, [:string], :int
+
+  # @method SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode)
+  # @param [String] twoFactorAuthenticationCode
+  # @return [Integer]
+  # @scope class
+  attach_function :SetTwoFactorAuthenticationCode, :SetTwoFactorAuthenticationCode, [:string], :int
+
+  # @method SetCacheMode(enable)
+  # @param [Integer] enable - 0 or 1 to disable or enable in-memory caching.
+  # @return [Integer]
+  # @scope class
+  attach_function :SetCacheMode, :SetCacheMode, [:uint], :int
 
   # @method GetProductMetadata(key, value, length)
   # @param [String] key
@@ -111,6 +222,50 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :GetProductMetadata, :GetProductMetadata, [:string, :pointer, :uint], :int
+
+  # @method GetProductVersionName(name, length)
+  # @param [String] name 
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetProductVersionName, :GetProductVersionName, [:pointer, :uint], :int
+
+  # @method GetProductVersionDisplayName(displayName, length)
+  # @param [String] displayName
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetProductVersionDisplayName, :GetProductVersionDisplayName, [:pointer, :uint], :int
+
+  # @method GetLicenseAllowedActivations(allowedActivations)
+  # @param [FFI::Pointer(*Int64T)] allowedActivations - A value of -1 indicates unlimited number of activations.
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseAllowedActivations, :GetLicenseAllowedActivations, [:pointer], :int
+
+  # @method GetLicenseTotalActivations(totalActivations)
+  # @param [FFI::Pointer(*Uint32T)] totalActivations
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseTotalActivations, :GetLicenseTotalActivations, [:pointer], :int
+
+  # @method GetLicenseAllowedDeactivations()
+  # @param [FFI::Pointer(*Int64T)] allowedDeactivations - A value of -1 indicates unlimited number of deactivations.
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseAllowedDeactivations, :GetLicenseAllowedDeactivations, [:pointer], :int
+
+  # @method GetLicenseTotalDeactivations()
+  # @param [FFI::Pointer(*Uint32T)] totalDeactivations
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseTotalDeactivations, :GetLicenseTotalDeactivations, [:pointer], :int
+
+  # @method GetLicenseCreationDate(creationDate)
+  # @param [FFI::Pointer(*Uint32T)] creationDate
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseCreationDate, :GetLicenseCreationDate, [:pointer], :int
 
   # @method GetProductVersionFeatureFlag(name, enabled, data, length)
   # @param [String] name
@@ -129,13 +284,14 @@ module LexActivator
   # @scope class
   attach_function :GetLicenseMetadata, :GetLicenseMetadata, [:string, :pointer, :uint], :int
 
-  # @method GetLicenseMeterAttribute(name, allowed_uses, total_uses)
+  # @method GetLicenseMeterAttribute(name, allowed_uses, total_uses, gross_uses)
   # @param [String] name
-  # @param [FFI::Pointer(*Uint32T)] allowed_uses
-  # @param [FFI::Pointer(*Uint32T)] total_uses
+  # @param [FFI::Pointer(*Int64T)] allowed_uses
+  # @param [FFI::Pointer(*Uint64T)] total_uses
+  # @param [FFI::Pointer(*Uint64T)] gross_uses
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseMeterAttribute, :GetLicenseMeterAttribute, [:string, :pointer, :pointer], :int
+  attach_function :GetLicenseMeterAttribute, :GetLicenseMeterAttribute, [:string, :pointer, :pointer, :pointer], :int
 
   # @method GetLicenseKey(license_key, length)
   # @param [String] license_key
@@ -149,6 +305,19 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :GetLicenseExpiryDate, :GetLicenseExpiryDate, [:pointer], :int
+
+  # @method GetLicenseMaintenanceExpiryDate(maintenanceExpiryDate)
+  # @param [FFI::Pointer(*Uint32T)] maintenanceExpiryDate - pointer to the integer that receives the value. A value of 0 indicates an unlimited maintenance period.  
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseMaintenanceExpiryDate, :GetLicenseMaintenanceExpiryDate, [:pointer], :int
+
+  # @method GetLicenseMaxAllowedReleaseVersion(maxAllowedReleaseVersion, length)
+  # @param [String] maxAllowedReleaseVersion
+  # @param [Integer] length 
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseMaxAllowedReleaseVersion, :GetLicenseMaxAllowedReleaseVersion, [:pointer, :uint], :int
 
   # @method GetLicenseUserEmail(email, length)
   # @param [String] email
@@ -179,12 +348,39 @@ module LexActivator
   # @scope class
   attach_function :GetLicenseUserMetadata, :GetLicenseUserMetadata, [:string, :pointer, :uint], :int
 
+  # @method GetLicenseOrganizationAddress(organizationAddress)
+  # @param [String] organizationAddress
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseOrganizationAddress, [:pointer], :int
+
+  # @method GetUserLicenses(UserLicense, length)
+  # @param [String] UserLicense
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetUserLicenses, [:pointer, :uint], :int
+
+  # @method GetLicenseOrganizationName(organizationName, length)
+  # @param [String] organizationName
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseOrganizationName, :GetLicenseOrganizationName, [:pointer, :uint], :int
+
   # @method GetLicenseType(license_type, length)
   # @param [String] license_type
   # @param [Integer] length
   # @return [Integer]
   # @scope class
   attach_function :GetLicenseType, :GetLicenseType, [:pointer, :uint], :int
+
+  # @method GetActivationId(id, length)
+  # @param [String] id
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetActivationId, :GetActivationId, [:pointer, :uint], :int
 
   # @method GetActivationMetadata(key, value, length)
   # @param [String] key
@@ -193,6 +389,15 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :GetActivationMetadata, :GetActivationMetadata, [:string, :pointer, :uint], :int
+
+  # @method GetActivationMode(initialMode, initialModeLength, currentMode, currentModeLength)
+  # @param [String] initialMode
+  # @param [Integer] initialModeLength
+  # @param [String] currentMode
+  # @param [Integer] currentModeLength
+  # @return [Integer]
+  # @scope class
+  attach_function :GetActivationMode, :GetActivationMode, [:pointer, :uint, :pointer, :uint], :int
 
   # @method GetActivationMeterAttributeUses(name, uses)
   # @param [String] name
@@ -228,6 +433,13 @@ module LexActivator
   # @scope class
   attach_function :GetTrialId, :GetTrialId, [:pointer, :uint], :int
 
+  # @method GetLibraryVersion(libraryVersion, length)
+  # @param [String] libraryVersion
+  # @param [Integer] length 
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLibraryVersion, :GetLibraryVersion, [:pointer, :uint], :int
+
   # @method GetLocalTrialExpiryDate(trial_expiry_date)
   # @param [FFI::Pointer(*Uint32T)] trial_expiry_date
   # @return [Integer]
@@ -242,6 +454,19 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :CheckForReleaseUpdate, :CheckForReleaseUpdate, [:string, :string, :string, :release_update_callback], :int
+
+  # @method AuthenticateUser(email, password)
+  # @param [String] email
+  # @param [String] password
+  # @return [Integer]
+  # @scope class
+  attach_function :AuthenticateUser, :AuthenticateUser, [:string, :string], :int
+
+  # @method AuthenticateUserWithIdToken(idToken)
+  # @param [String] idToken - The id token obtained from the OIDC provider.
+  # @return [Integer]
+  # @scope class
+  attach_function :AuthenticateUserWithIdToken, :AuthenticateUserWithIdToken, [:string], :int
 
   # @method ActivateLicense()
   # @return [Integer]

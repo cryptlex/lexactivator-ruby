@@ -42,6 +42,11 @@ module LexStatusCodes
 
   LA_RELEASE_NO_UPDATE_AVAILABLE = 31
 
+  # CODE: LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED
+  # MESSAGE: The update available is not allowed for this license.
+
+  LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED = 32,
+
   # CODE: LA_E_FILE_PATH
   # MESSAGE: Invalid file path.
   LA_E_FILE_PATH = 40
@@ -183,6 +188,10 @@ module LexStatusCodes
   # MESSAGE: The meter attribute has reached it's usage limit.
   LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED = 73    
   
+  # CODE: LA_E_CUSTOM_FINGERPRINT_LENGTH
+  # MESSAGE: Custom device fingerprint length is less than 64 characters or more than 256 characters.
+  LA_E_CUSTOM_FINGERPRINT_LENGTH = 74,
+
   # CODE: LA_E_PRODUCT_VERSION_NOT_LINKED
   # MESSAGE: No product version is linked with the license.
   LA_E_PRODUCT_VERSION_NOT_LINKED = 75,
@@ -190,6 +199,18 @@ module LexStatusCodes
   #  CODE: LA_E_FEATURE_FLAG_NOT_FOUND
   # MESSAGE: The product version feature flag does not exist.
   LA_E_FEATURE_FLAG_NOT_FOUND = 76,
+  
+  # CODE: LA_E_RELEASE_VERSION_NOT_ALLOWED
+  # MESSAGE: The release version is not allowed.
+  LA_E_RELEASE_VERSION_NOT_ALLOWED = 77,  
+
+  # CODE: LA_E_RELEASE_PLATFORM_LENGTH
+  # MESSAGE: Release platform length is more than 256 characters.
+  LA_E_RELEASE_PLATFORM_LENGTH = 78,
+
+  # CODE: LA_E_RELEASE_CHANNEL_LENGTH
+  # MESSAGE: Release channel length is more than 256 characters.
+  LA_E_RELEASE_CHANNEL_LENGTH = 79,
 
   # CODE: LA_E_VM
   # MESSAGE: Application is being run inside a virtual machine / hypervisor,
@@ -203,6 +224,34 @@ module LexStatusCodes
   # CODE: LA_E_IP
   # MESSAGE: IP address is not allowed.
   LA_E_IP = 82
+  
+  # CODE: LA_E_CONTAINER
+  # MESSAGE: Application is being run inside a container and activation has been disallowed in the container.
+  LA_E_CONTAINER = 83,
+  
+  # CODE: LA_E_RELEASE_VERSION
+  # MESSAGE: Invalid release version. Make sure the release version uses the following formats: x.x, x.x.x, x.x.x.x (where x is a number).
+  LA_E_RELEASE_VERSION = 84,
+
+  # CODE: LA_E_RELEASE_PLATFORM
+  # MESSAGE: Release platform not set.
+  LA_E_RELEASE_PLATFORM = 85,
+
+  # CODE: LA_E_RELEASE_CHANNEL
+  # MESSAGE: Release channel not set.
+  LA_E_RELEASE_CHANNEL = 86,
+
+  # CODE: LA_E_USER_NOT_AUTHENTICATED
+  # MESSAGE: The user is not authenticated.
+  LA_E_USER_NOT_AUTHENTICATED = 87,
+
+  # CODE: LA_E_TWO_FACTOR_AUTHENTICATION_CODE_MISSING
+  # MESSAGE: The two-factor authentication code for the user authentication is missing.
+  LA_E_TWO_FACTOR_AUTHENTICATION_CODE_MISSING = 88,
+
+  # CODE: LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
+  # MESSAGE: The two-factor authentication code provided by the user is invalid.
+  LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID = 89,
 
   # CODE: LA_E_RATE_LIMIT
   # MESSAGE: Rate limit for API has reached, try again later.

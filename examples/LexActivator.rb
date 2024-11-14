@@ -45,17 +45,6 @@ module LexActivator
            :state, [:char, BUFFER_SIZE_256],
            :country, [:char, BUFFER_SIZE_256],
            :postalCode, [:char, BUFFER_SIZE_256]
-
-    def to_hash
-      {
-        addressLine1: self[:addressLine1].to_s,
-        addressLine2: self[:addressLine2].to_s,
-        city: self[:city].to_s,
-        state: self[:state].to_s,
-        country: self[:country].to_s,
-        postalCode: self[:postalCode].to_s
-      }
-    end
   end
 
   class Metadata < FFI::Struct
@@ -69,19 +58,6 @@ module LexActivator
            :key, [:char, BUFFER_SIZE_256],
            :type, [:char, BUFFER_SIZE_256],
            :metadata, [Metadata, MAX_METADATA_SIZE] 
-
-    
-    def to_hash
-      {
-        allowedActivations: self[:allowedActivations],
-        allowedDeactivations: self[:allowedDeactivations],
-        key: self[:key].to_s.strip,
-        type: self[:type].to_s.strip,
-        metadata: self[:metadata].take_while { |m| !m[:key].to_s.strip.empty? }.map do |m|
-          { key: m[:key].to_s.strip, value: m[:value].to_s.strip }
-        end
-      }
-    end
   end
 
   # @method SetProductFile(file_path)
@@ -138,7 +114,7 @@ module LexActivator
   # @param [Integer] leaseDuration - value of the lease duration. A value of -1 indicates unlimited lease duration.
   # @return [Integer]
   # @scope class
-  attach_function :SetActivationLeaseDuration, [:int64], :int
+  attach_function :SetActivationLeaseDuration, :SetActivationLeaseDuration, [:int64], :int
 
   # @method SetActivationMetadata(key, value)
   # @param [String] key
@@ -269,7 +245,7 @@ module LexActivator
 
   # @method GetProductVersionFeatureFlag(name, enabled, data, length)
   # @param [String] name
-  # @param [Integer] enabled - Receives the value - 0 or 1
+  # @param [Integer] enabled - 0 or 1 indicating disabled or enabled for feature flag.
   # @param [String] data
   # @param [Integer] length
   # @return [Integer]
@@ -301,7 +277,7 @@ module LexActivator
   attach_function :GetLicenseKey, :GetLicenseKey, [:pointer, :uint], :int
 
   # @method GetLicenseExpiryDate(expiry_date)
-  # @param [FFI::Pointer(*Uint32T)] expiry_date
+  # @param [FFI::Pointer(*Uint32T)] expiry_date - A value of 0 indicates it has no expiry i.e a lifetime license.
   # @return [Integer]
   # @scope class
   attach_function :GetLicenseExpiryDate, :GetLicenseExpiryDate, [:pointer], :int

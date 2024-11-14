@@ -46,7 +46,7 @@ module LexActivator
            :country, [:char, BUFFER_SIZE_256],
            :postalCode, [:char, BUFFER_SIZE_256]
 
-    def to_string
+    def to_hash
       {
         addressLine1: self[:addressLine1].to_s,
         addressLine2: self[:addressLine2].to_s,
@@ -71,7 +71,7 @@ module LexActivator
            :metadata, [Metadata, MAX_METADATA_SIZE] 
 
     
-    def to_string
+    def to_hash
       {
         allowedActivations: self[:allowedActivations],
         allowedDeactivations: self[:allowedDeactivations],
@@ -349,17 +349,17 @@ module LexActivator
   attach_function :GetLicenseUserMetadata, :GetLicenseUserMetadata, [:string, :pointer, :uint], :int
 
   # @method GetLicenseOrganizationAddress(organizationAddress)
-  # @param [String] organizationAddress
+  # @param [FFI::Pointer(OrganizationAddress)] organizationAddress
   # @return [Integer]
   # @scope class
-  attach_function :GetLicenseOrganizationAddress, [:pointer], :int
+  attach_function :GetLicenseOrganizationAddress, :GetLicenseOrganizationAddress, [:pointer], :int
 
-  # @method GetUserLicenses(UserLicense, length)
-  # @param [String] UserLicense
+  # @method GetUserLicenses(userLicense, length)
+  # @param [FFI::Pointer(UserLicense)] userLicense
   # @param [Integer] length
   # @return [Integer]
   # @scope class
-  attach_function :GetUserLicenses, [:pointer, :uint], :int
+  attach_function :GetUserLicenses, :GetUserLicenses, [:pointer, :uint], :int
 
   # @method GetLicenseOrganizationName(organizationName, length)
   # @param [String] organizationName

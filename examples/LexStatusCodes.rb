@@ -42,11 +42,6 @@ module LexStatusCodes
 
   LA_RELEASE_NO_UPDATE_AVAILABLE = 31
 
-  # CODE: LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED
-  # MESSAGE: The update available is not allowed for this license.
-
-  LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED = 32,
-
   # CODE: LA_E_FILE_PATH
   # MESSAGE: Invalid file path.
   LA_E_FILE_PATH = 40
@@ -264,4 +259,28 @@ module LexStatusCodes
   # CODE: LA_E_CLIENT
   # MESSAGE: Client error.
   LA_E_CLIENT = 92
+
+  # CODE: LA_E_LOGIN_TEMPORARILY_LOCKED
+  # MESSAGE: The user account has been temporarily locked for 5 mins due to 5 failed attempts.
+  LA_E_LOGIN_TEMPORARILY_LOCKED = 100,
+
+  # CODE: LA_E_AUTHENTICATION_ID_TOKEN_INVALID
+  # MESSAGE: Invalid authentication ID token.
+  LA_E_AUTHENTICATION_ID_TOKEN_INVALID = 101,
+
+  # CODE: LA_E_OIDC_SSO_NOT_ENABLED
+  # MESSAGE: OIDC SSO is not enabled.
+  LA_E_OIDC_SSO_NOT_ENABLED = 102,
+
+  # CODE: LA_E_USERS_LIMIT_REACHED
+  # MESSAGE: The allowed users for this account has reached its limit.
+  LA_E_USERS_LIMIT_REACHED = 103,
+
+  # CODE: LA_E_OS_USER
+  # MESSAGE: OS user has changed since activation and the license is user-locked.
+  LA_E_OS_USER = 104,
+
+  # CODE: LA_E_INVALID_PERMISSION_FLAG
+  # MESSAGE: Invalid permission flag.
+  LA_E_INVALID_PERMISSION_FLAG = 105,
 end

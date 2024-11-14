@@ -269,7 +269,7 @@ module LexActivator
 
   # @method GetProductVersionFeatureFlag(name, enabled, data, length)
   # @param [String] name
-  # @param [Integer] enabled
+  # @param [Integer] enabled - Receives the value - 0 or 1
   # @param [String] data
   # @param [Integer] length
   # @return [Integer]

@@ -283,4 +283,8 @@ module LexStatusCodes
   # CODE: LA_E_INVALID_PERMISSION_FLAG
   # MESSAGE: Invalid permission flag.
   LA_E_INVALID_PERMISSION_FLAG = 105
+
+  # CODE: LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED
+  # MESSAGE: The free plan has reached its activation limit.
+  LA_E_INVALID_PERMISSION_FLAG = 106
 end

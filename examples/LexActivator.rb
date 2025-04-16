@@ -252,6 +252,34 @@ module LexActivator
   # @scope class
   attach_function :GetProductVersionFeatureFlag, :GetProductVersionFeatureFlag, [:string, :pointer, :pointer, :uint], :int
 
+  # @method GetLicenseEntitlementSetName(name, length)
+  # @param [String] name
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseEntitlementSetName, :GetLicenseEntitlementSetName, [:pointer, :uint], :int
+
+  # @method GetLicenseEntitlementSetDisplayName(displayName, length)
+  # @param [String] displayName
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLicenseEntitlementSetDisplayName, :GetLicenseEntitlementSetDisplayName, [:pointer, :uint], :int
+
+  # @method GetFeatureEntitlements(featureEntitlements, length)
+  # @param [FFI::Pointer(*FeatureEntitlement)] featureEntitlements
+  # @param [Integer] length
+  # @return [Integer]
+  # @scope class
+  attach_function :GetFeatureEntitlements, :GetFeatureEntitlements, [:pointer, :uint], :int
+
+  # @method GetFeatureEntitlement(featureName, featureEntitlement)
+  # @param [String] featureName
+  # @param [FFI::Pointer(*FeatureEntitlement)] featureEntitlement
+  # @return [Integer]
+  # @scope class
+  attach_function :GetFeatureEntitlement, :GetFeatureEntitlement, [:string, :pointer, :uint], :int
+
   # @method GetLicenseMetadata(key, value, length)
   # @param [String] key
   # @param [String] value

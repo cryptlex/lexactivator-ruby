@@ -260,7 +260,6 @@ module LexStatusCodes
   # MESSAGE: Client error.
   LA_E_CLIENT = 92
 
-
   # CODE: LA_E_ACCOUNT_ID
   # MESSAGE: Invalid account ID.
   LA_E_ACCOUNT_ID = 93
@@ -304,4 +303,8 @@ module LexStatusCodes
   # CODE: LA_E_ENTITLEMENT_SET_NOT_LINKED
   # MESSAGE: No entitlement set is linked to the license.
   LA_E_ENTITLEMENT_SET_NOT_LINKED = 109
+
+  # CODE: LA_E_LICENSE_NOT_EFFECTIVE
+  # MESSAGE: The license cannot be activated before its effective date.
+  LA_E_LICENSE_NOT_EFFECTIVE = 110
 end

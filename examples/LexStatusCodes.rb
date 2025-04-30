@@ -290,7 +290,7 @@ module LexStatusCodes
 
   # CODE: LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED
   # MESSAGE: The free plan has reached its activation limit.
-  LA_E_INVALID_PERMISSION_FLAG = 106
+  LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED = 106
 
   # CODE: LA_E_FEATURE_ENTITLEMENTS_INVALID
   # MESSAGE: Invalid feature entitlements.

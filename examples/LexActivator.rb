@@ -2,7 +2,7 @@ require "ffi"
 
 module LexActivator
   extend FFI::Library
-  ffi_lib ["LexActivator", "./libLexActivator.so", "#{File.dirname(__FILE__)}/LexActivator.dll"]
+  ffi_lib ["#{File.dirname(__FILE__)}/libLexActivator.dylib", "./libLexActivator.so", "#{File.dirname(__FILE__)}/LexActivator.dll"]
   callback :license_callback, [:uint], :void
   callback :release_update_callback, [:uint], :void
 
@@ -58,6 +58,12 @@ module LexActivator
            :key, [:char, BUFFER_SIZE_256],
            :type, [:char, BUFFER_SIZE_256],
            :metadata, [Metadata, MAX_METADATA_SIZE] 
+  end
+
+  class FeatureEntitlement < FFI::Struct
+    layout :featureName, [:char, BUFFER_SIZE_256],
+           :featureDisplayName, [:char, BUFFER_SIZE_256],
+           :value, [:char, BUFFER_SIZE_256]
   end
 
   # @method SetProductFile(file_path)
@@ -267,18 +273,18 @@ module LexActivator
   attach_function :GetLicenseEntitlementSetDisplayName, :GetLicenseEntitlementSetDisplayName, [:pointer, :uint], :int
 
   # @method GetFeatureEntitlements(featureEntitlements, length)
-  # @param [FFI::Pointer(*FeatureEntitlement)] featureEntitlements
-  # @param [Integer] length
+  # @param [FFI::Pointer(*FeatureEntitlement)] featureEntitlements - Pointer to an array of FeatureEntitlement structs
+  # @param [Integer] length - The number of FeatureEntitlement structs in the array
   # @return [Integer]
   # @scope class
   attach_function :GetFeatureEntitlements, :GetFeatureEntitlements, [:pointer, :uint], :int
 
   # @method GetFeatureEntitlement(featureName, featureEntitlement)
-  # @param [String] featureName
-  # @param [FFI::Pointer(*FeatureEntitlement)] featureEntitlement
+  # @param [String] featureName - The name of the feature
+  # @param [FFI::Pointer(*FeatureEntitlement)] featureEntitlement - Pointer to a FeatureEntitlement struct
   # @return [Integer]
   # @scope class
-  attach_function :GetFeatureEntitlement, :GetFeatureEntitlement, [:string, :pointer, :uint], :int
+  attach_function :GetFeatureEntitlement, :GetFeatureEntitlement, [:string, :pointer], :int
 
   # @method GetLicenseMetadata(key, value, length)
   # @param [String] key
@@ -358,9 +364,9 @@ module LexActivator
   # @scope class
   attach_function :GetLicenseOrganizationAddress, :GetLicenseOrganizationAddress, [:pointer], :int
 
-  # @method GetUserLicenses(userLicense, length)
-  # @param [FFI::Pointer(UserLicense)] userLicense
-  # @param [Integer] length
+  # @method GetUserLicenses(userLicenses, length)
+  # @param [FFI::Pointer(UserLicense)] userLicenses - Pointer to an array of UserLicense structs
+  # @param [Integer] length - The number of UserLicense structs in the array
   # @return [Integer]
   # @scope class
   attach_function :GetUserLicenses, :GetUserLicenses, [:pointer, :uint], :int

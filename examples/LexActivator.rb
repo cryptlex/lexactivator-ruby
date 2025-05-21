@@ -276,6 +276,18 @@ module LexActivator
   # @scope class
   attach_function :GetLicenseKey, :GetLicenseKey, [:pointer, :uint], :int
 
+  # @method GetActivationCreationDate(creation_date)
+  # @param [FFI::Pointer(*Uint32T)] creation_date
+  # @return [Integer]
+  # @scope class
+  attach_function :GetActivationCreationDate, :GetActivationCreationDate, [:pointer], :int
+
+  # @method GetActivationLastSyncedDate(last_synced_date)
+  # @param [FFI::Pointer(*Uint32T)] last_synced_date
+  # @return [Integer]
+  # @scope class
+  attach_function :GetActivationLastSyncedDate, :GetActivationLastSyncedDate, [:pointer], :int
+
   # @method GetLicenseExpiryDate(expiry_date)
   # @param [FFI::Pointer(*Uint32T)] expiry_date - A value of 0 indicates it has no expiry i.e a lifetime license.
   # @return [Integer]

@@ -1,11 +1,12 @@
 require "./LexActivator"
 require "./LexStatusCodes"
 
+
 # Refer to following link for LexActivator API docs:
 # https://github.com/cryptlex/lexactivator-c/blob/master/examples/LexActivator.h
 
 def init()
-  # status = LexActivator.SetProductFile("ABSOLUTE_PATH_OF_PRODUCT.DAT_FILE")
+  
   status = LexActivator.SetProductData(LexActivator::encode_utf16("PASTE_CONTENT_OF_PRODUCT.DAT_FILE"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
@@ -18,7 +19,7 @@ def init()
     exit(status)
   end
 
-  status = LexActivator.SetAppVersion(LexActivator::encode_utf16("PASTE_YOUR_APP_VERION"))
+  status = LexActivator.SetReleaseVersion(LexActivator::encode_utf16("1.0.0"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
@@ -39,10 +40,11 @@ def activate()
   end
 
   status = LexActivator.ActivateLicense()
-  if LexStatusCodes::LA_OK == status || LexStatusCodes::LA_EXPIRED == status || LexStatusCodes::LA_SUSPENDED == status
+  if [LexStatusCodes::LA_OK, LexStatusCodes::LA_EXPIRED, LexStatusCodes::LA_SUSPENDED].include?(status)
     puts "License activated successfully: #{status}"
   else
     puts "License activation failed: #{status}"
+    exit(status)
   end
 end
 
@@ -63,6 +65,7 @@ def activate_trial()
   end
 end
 
+# License callback (optional)
 LicenseCallback = FFI::Function.new(:void, [:uint]) do |status|
   puts "License status: #{status}"
 end
@@ -71,8 +74,9 @@ SoftwareReleaseUpdateCallback = FFI::Function.new(:void, [:uint]) do |status|
   puts "Release status: #{status}"
 end
 
+# Run it
 init()
-# activate()
+activate() # uncomment this to activate the license
 LexActivator.SetLicenseCallback(LicenseCallback)
 status = LexActivator.IsLicenseGenuine()
 if LexStatusCodes::LA_OK == status
@@ -88,7 +92,6 @@ if LexStatusCodes::LA_OK == status
   email = LexActivator::decode_utf16(buffer.read_string(buffer.size).rstrip)
   puts "License user email: #{email}"
   puts "License is genuinely activated!"
-
   # puts "Checking for software release update..."
   # status = LexActivator.CheckForReleaseUpdate("windows", "1.0.0", "stable", SoftwareReleaseUpdateCallback)
   # if LexStatusCodes::LA_OK != status
@@ -118,3 +121,6 @@ else
     activate_trial()
   end
 end
+
+puts "Press Enter to exit..."
+gets

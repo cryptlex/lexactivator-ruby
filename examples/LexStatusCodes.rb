@@ -260,6 +260,10 @@ module LexStatusCodes
   # MESSAGE: Client error.
   LA_E_CLIENT = 92
 
+  # CODE: LA_E_ACCOUNT_ID
+  # MESSAGE: Invalid account ID.
+  LA_E_ACCOUNT_ID = 93
+
   # CODE: LA_E_LOGIN_TEMPORARILY_LOCKED
   # MESSAGE: The user account has been temporarily locked for 5 mins due to 5 failed attempts.
   LA_E_LOGIN_TEMPORARILY_LOCKED = 100
@@ -286,5 +290,21 @@ module LexStatusCodes
 
   # CODE: LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED
   # MESSAGE: The free plan has reached its activation limit.
-  LA_E_INVALID_PERMISSION_FLAG = 106
+  LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED = 106
+
+  # CODE: LA_E_FEATURE_ENTITLEMENTS_INVALID
+  # MESSAGE: Invalid feature entitlements.
+  LA_E_FEATURE_ENTITLEMENTS_INVALID = 107
+
+  # CODE: LA_E_FEATURE_ENTITLEMENT_NOT_FOUND
+  # MESSAGE: The feature entitlement does not exist.
+  LA_E_FEATURE_ENTITLEMENT_NOT_FOUND = 108
+
+  # CODE: LA_E_ENTITLEMENT_SET_NOT_LINKED
+  # MESSAGE: No entitlement set is linked to the license.
+  LA_E_ENTITLEMENT_SET_NOT_LINKED = 109
+
+  # CODE: LA_E_LICENSE_NOT_EFFECTIVE
+  # MESSAGE: The license cannot be activated before its effective date.
+  LA_E_LICENSE_NOT_EFFECTIVE = 110
 end

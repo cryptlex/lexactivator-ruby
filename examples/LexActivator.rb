@@ -36,6 +36,7 @@ module LexActivator
   end
 
   BUFFER_SIZE_256 = 256
+  BUFFER_SIZE_4096 = 4096
   MAX_METADATA_SIZE = 100 
 
   class OrganizationAddress < FFI::Struct
@@ -49,13 +50,15 @@ module LexActivator
 
   class Metadata < FFI::Struct
     layout :key, [:char, BUFFER_SIZE_256],
-           :value, [:char, BUFFER_SIZE_256]
+           :value, [:char, BUFFER_SIZE_4096]
   end
 
   class UserLicense < FFI::Struct
     layout :allowedActivations, :int64,
            :allowedDeactivations, :int64,
            :key, [:char, BUFFER_SIZE_256],
+           :totalActivations, :uint32,
+           :totalDeactivations, :uint32,
            :type, [:char, BUFFER_SIZE_256],
            :metadata, [Metadata, MAX_METADATA_SIZE] 
   end
@@ -63,7 +66,8 @@ module LexActivator
   class FeatureEntitlement < FFI::Struct
     layout :featureName, [:char, BUFFER_SIZE_256],
            :featureDisplayName, [:char, BUFFER_SIZE_256],
-           :value, [:char, BUFFER_SIZE_256]
+           :value, [:char, BUFFER_SIZE_256],
+           :expiresAt, :int64
   end
 
   # @method SetProductFile(file_path)

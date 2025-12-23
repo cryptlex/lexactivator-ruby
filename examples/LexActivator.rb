@@ -22,7 +22,7 @@ module LexActivator
 
   def self.decode_utf16(input)
     if FFI::Platform::IS_WINDOWS
-      input.force_encoding("UTF-16LE").encode("UTF-8", :invalid => :replace, :undef => :replace)
+      "#{input}\0".force_encoding("UTF-16LE").encode("UTF-8", :invalid => :replace, :undef => :replace)
     else
       input
     end

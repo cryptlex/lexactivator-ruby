@@ -597,6 +597,12 @@ module LexActivator
   # @scope class
   attach_function :ResetActivationMeterAttributeUses, :ResetActivationMeterAttributeUses, [:string], :int
 
+  # @method MigrateToSystemWideActivation(oldPermissionFlag)
+  # @param [Integer] oldPermissionFlag
+  # @return [Integer]
+  # @scope class
+  attach_function :MigrateToSystemWideActivation, :MigrateToSystemWideActivation, [:uint], :int
+
   # @method Reset()
   # @return [Integer]
   # @scope class

@@ -7,13 +7,14 @@ require "./LexStatusCodes"
 
 def init()
   
-  status = LexActivator.SetProductData(LexActivator::encode_utf16("PASTE_CONTENT_OF_PRODUCT.DAT_FILE"))
+  status = LexActivator.SetProductData(LexActivator::encode_utf16("QkZFOTFCQjgyNDcxQjAwOTQ0N0EwMjQ2MTFBNEU4MTU=.cDgL9zxFNkVRa473ZM0i7RaD3xUDpoSQDpzzLcZP8oHkSwv8aheQM0BFCWei9cTswbTBKAhd3tK6ikgmYBudgynbEse6tqBXtbYC6hG6JaRxboOPG51gcoYU9z9nIGXARML3tXyX1tm+esNieQqbR/TUA9zxf9LXfcy7uWY/6Pj1qXPqKaQupsQSJbZfvNrFVmvZqeMfVPqzWB0xaVAoo40nxK/PbdSchU1Q6gRNTUqlZ64EhhYZAerzLv08/PjKPpFn5edC4jq9hmRzs2Du0g9T2O5igP4sk2Bkr8fH3086sSSRks0yIhqFiauM/jytq1EtiLwcbwaKudvkJDgBhZYYYuM5X3EutiZcZ9DmJljdghNWivuy/WCSbBYvs1Rm+ikkUeFRckc9TGHvVCSaIZ115LU5IBmxGdRFEsvlh+oAW4zoJ2Uus8z92LF1c3vsGoa8G2O7XMP+eacTEkJ2yOCAOz/ERZn9duaPGmtDYrmGilHFdQht+J2DeC9sdtBMQu17+M8PwEZvQzBG+WV3uGdgQz1eptZ/g4BNf45B50auCuCUGGilog3fvdWThrFO4RUaZAYs8Mv2qrZULxM19tfFdGfYXghNZM1UHbNCvbJaXFEGL/ZaesGhyAtY0w+zQu+GdCchd3ZpvHGxKZU7U6LLoSu0YzUF56QDTKqBZrqEmz0OgQHBWTNxLpOOI/uDKBzvjKxCYZAtxrc/KjZ2/d+6vlZR/R2elRg5qv5YtOC74vHut/u50cz+kez++1q/jTnLsNVG0+V+lsP4sR3rcAYsJzRmfOmDER0YDnPiQgK6RbarcWpARcIvamHnW3Lc"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
   end
 
-  status = LexActivator.SetProductId(LexActivator::encode_utf16("PASTE_PRODUCT_ID"), LexActivator::PermissionFlags::LA_USER)
+  LexActivator.MigrateToSystemWideActivation(LexActivator::PermissionFlags::LA_USER)
+  status = LexActivator.SetProductId(LexActivator::encode_utf16("01997b28-eeb0-7fcb-aab2-a6bf4a2f6fc3"), LexActivator::PermissionFlags::LA_ALL_USERS)
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
@@ -27,7 +28,7 @@ def init()
 end
 
 def activate()
-  status = LexActivator.SetLicenseKey(LexActivator::encode_utf16("PASTE_LICENSE_KEY"))
+  status = LexActivator.SetLicenseKey(LexActivator::encode_utf16("655C33-0A3B2B-489DB0-732044-CAF5D3-952D87"))
   if LexStatusCodes::LA_OK != status
     puts "Error Code: #{status}"
     exit(status)
@@ -76,7 +77,7 @@ end
 
 # Run it
 init()
-activate() # uncomment this to activate the license
+#activate() # uncomment this to activate the license
 LexActivator.SetLicenseCallback(LicenseCallback)
 status = LexActivator.IsLicenseGenuine()
 if LexStatusCodes::LA_OK == status

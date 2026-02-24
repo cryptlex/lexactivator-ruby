@@ -442,6 +442,12 @@ module LexActivator
   # @scope class
   attach_function :GetServerSyncGracePeriodExpiryDate, :GetServerSyncGracePeriodExpiryDate, [:pointer], :int
 
+  # @method GetLastActivationError(error_code)
+  # @param [FFI::Pointer(*Uint32T)] error_code
+  # @return [Integer]
+  # @scope class
+  attach_function :GetLastActivationError, :GetLastActivationError, [:pointer], :int
+
   # @method GetTrialActivationMetadata(key, value, length)
   # @param [String] key
   # @param [String] value
@@ -594,6 +600,12 @@ module LexActivator
   # @return [Integer]
   # @scope class
   attach_function :ResetActivationMeterAttributeUses, :ResetActivationMeterAttributeUses, [:string], :int
+
+  # @method MigrateToSystemWideActivation(old_Permission_Flag)
+  # @param [Integer] oldPermissionFlag
+  # @return [Integer]
+  # @scope class
+  attach_function :MigrateToSystemWideActivation, :MigrateToSystemWideActivation, [:uint], :int
 
   # @method Reset()
   # @return [Integer]

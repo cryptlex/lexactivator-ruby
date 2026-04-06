@@ -544,10 +544,20 @@ module LexActivator
   # @scope class
   attach_function :IsLicenseValid, :IsLicenseValid, [], :int
 
+  # @method SyncLicenseActivation()
+  # @return [Integer]
+  # @scope class
+  attach_function :SyncLicenseActivation, :SyncLicenseActivation, [], :int
+
   # @method ActivateTrial()
   # @return [Integer]
   # @scope class
   attach_function :ActivateTrial, :ActivateTrial, [], :int
+
+  # @method SyncTrialActivation()
+  # @return [Integer]
+  # @scope class
+  attach_function :SyncTrialActivation, :SyncTrialActivation, [], :int
 
   # @method ActivateTrialOffline(file_path)
   # @param [String] file_path

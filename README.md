@@ -3,4 +3,4 @@
  
 Refer to following for documentation:
 
-https://docs.cryptlex.com/node-locked-licenses/using-lexactivator
+https://cryptlex.com/docs/node-locked-licenses/using-lexactivator
